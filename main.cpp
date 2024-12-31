@@ -7,37 +7,42 @@ using namespace std;
 
 template<class T>
 class SimpleVector {
-public:
+
 	T* data;
-	int currentSize; //½ºÅÃÇüÅÂÀÌ±â¿¡ ¸¶Áö¸·ÀÎµ¦½º¸¸ ¾Ë¸é µÈ´Ù
+	int currentSize; //ìŠ¤íƒí˜•íƒœì´ê¸°ì— ë§ˆì§€ë§‰ì¸ë±ìŠ¤ë§Œ ì•Œë©´ ëœë‹¤
 	int currentCapacity;
 
 public:
 	SimpleVector() :currentSize(0) {
 		data = new T[10];
 	}
-	SimpleVector(T number) : currentSize(0), currentCapacity(number) {//Çò°¥¸®°Ú´Ù ¤»¤»
+	SimpleVector(T number) : currentSize(0), currentCapacity(number) {
 		data = new T[number];
 	}
-	SimpleVector(const SimpleVector& other) { // º¹»ç»ı¼ºÀÚ
-		this->data = other.data;
-		this->currentSize = other.currentSize;
-		this->currentCapacity = other.currentCapacity;
+	template<class T> //í…œí”Œë¦¿ í´ë˜ìŠ¤ë¥¼ ë³µì‚¬í• ë–„ëŠ” ì•ì— ì´ê±¸ ë¶™ì—¬ì¤˜ì•¼ ëœë‹¤...
+	SimpleVector(const SimpleVector& other) { // ë³µì‚¬ìƒì„±ì
+		this->data = new T[other.capacity()]; //data = other.data í•˜ë©´ ì£¼ì†Œë¥¼ ê³µìœ í•˜ê²Œ ëœë‹¤. data = ì£¼ì†Œê°’ ì´ê¸° ë–„ë¬¸
+		this->currentSize = other.size(); //ì–˜ëŠ” í¬ì¸í„° ì•„ë‹ˆë¼ì„œ ê° ì¶˜
+		this->currentCapacity = other.capacity();//ì–˜ë„
+		for (int i = 0; i < other.size(); i++) { // ê°’ ë¶™ì—¬ë„£ê¸°
+			this->data[i] = other.data[i];
+		}
 	}
 	~SimpleVector() {
 		delete[] data;
+		cout << "ì†Œë©¸í™•ì¸" << endl;
 	}
 	void push_back(T something) {
 
 		if (currentSize >= currentCapacity) {
 			T* imsi = data;
-			data = new T[currentCapacity + 5]; //5 ´Ã¸®°í
-			for (int i = 0; i < currentSize; i++) {// ¿ø·¹°ª º¹»çÇÏ°í
+			data = new T[currentCapacity + 5]; //5 ëŠ˜ë¦¬ê³ 
+			for (int i = 0; i < currentSize; i++) {// ì›ë ˆê°’ ë³µì‚¬í•˜ê³ 
 				data[i] = imsi[i];
 				
 			}
-			currentCapacity += 5;//ÃÑ¿ë·® ´Ã·Á³õ°í
-			cout << "¿ë·® 5 Áõ°¡" << endl; //È®ÀÎ¸Ş½ÃÁö
+			currentCapacity += 5;//ì´ìš©ëŸ‰ ëŠ˜ë ¤ë†“ê³ 
+			cout << "ìš©ëŸ‰ 5 ì¦ê°€" << endl; //í™•ì¸ë©”ì‹œì§€
 		}
 		data[currentSize] = something;
 		currentSize++;
@@ -45,7 +50,7 @@ public:
 
 	void pop_back() {
 		if (currentSize <= 0) {
-			cout << "°ªÀÌ ¾øÀ½" << endl;
+			cout << "ê°’ì´ ì—†ìŒ" << endl;
 			return;
 		}
 		currentSize--;
@@ -76,12 +81,12 @@ int main() {
 	int value;
 	cin >> num;
 	SimpleVector<int> array(num);
-
+	SimpleVector<int> Arirang(array);
 	while (true) {
 		cout << "1: push, 2:pop, 3: size, 4: capacity, 5: print, 6: exit" << endl;
 		cin >> input;
 		switch (input) {
-		case 1: cout << "ÀÔ·Â" << endl;
+		case 1: cout << "ì…ë ¥" << endl;
 			cin >> value; array.push_back(value);
 			break;
 		case 2: array.pop_back();
